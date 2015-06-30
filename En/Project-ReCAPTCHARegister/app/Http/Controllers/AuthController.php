@@ -14,13 +14,14 @@ class AuthController extends Controller
 
 	public function __construct()
 	{
+		$this->middleware('guest', ['except' => 'getLogout']);
 		$this->middleware('recaptcha');
 	}
 
 	public function validator(array $data)
 	{
 		#########
-		# recaptcha é preenchido pelo middleware ValidadorReCAPTCHA e checamos se é 1 (válido).
+		# recaptcha is filled by ValidatorReCAPTCHA, then we just check whether is 1 (valid).
 		###
 		Validator::extend(
 			'truable', 
@@ -28,14 +29,16 @@ class AuthController extends Controller
 			{
 				return isset($value) and intval($value) == 1;
 			}, 
-			trans('validation.recaptcha') #mensagem para quando recaptcha não for 1.
+			trans('validation.recaptcha') #message when is not valid.
 		);
 
 		#########
-		# adiciono recaptcha para ser validado.
+		# Add recaptcha value to be validate.
 		###
 		return Validator::make(
-			array_add($data, 'recaptcha', Session::pull('recaptcha', '')), 
+			array_add(
+				$data, 'recaptcha', Session::pull('recaptcha', '')
+			), 
 			[
 				'nome' => 'required|max:255',
 				'email' => 'required|email|max:255|unique:users',

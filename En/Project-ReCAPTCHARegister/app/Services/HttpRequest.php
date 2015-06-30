@@ -3,7 +3,7 @@
 namespace App\Services;
 
 ########
-# Simples Classe Wrapper para Curl
+# Simple Wrapper Class
 ##
 class HttpRequest
 {
@@ -12,7 +12,7 @@ class HttpRequest
 	const POST  = CURLOPT_POST;
 	const GET   = null;
 
-	public function __construct($url, array $args = null, $metodo = HttpRequest::GET)
+	public function __construct($url, array $args = null, $method = HttpRequest::GET)
 	{
 
 		$this->curl = curl_init();
@@ -21,9 +21,9 @@ class HttpRequest
 
 		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
 
-		if( ! is_null($metodo) )
+		if( ! is_null($method) )
 		{
-			curl_setopt($this->curl, $metodo, true);
+			curl_setopt($this->curl, $method, true);
 
 			if( ! is_null($args) )
 			{
@@ -50,12 +50,12 @@ class HttpRequest
 		curl_setopt($this->curl, CURLOPT_URL, $url);
 	}
 
-	public function sucesso()
+	public function success()
 	{
 		return curl_errno($this->curl) == 0;
 	}
 
-	public function getResposta()
+	public function getResponse()
 	{
 		return curl_exec($this->curl);
 	}

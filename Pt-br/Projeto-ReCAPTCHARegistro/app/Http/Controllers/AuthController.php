@@ -14,6 +14,7 @@ class AuthController extends Controller
 
 	public function __construct()
 	{
+		$this->middleware('guest', ['except' => 'getLogout']);
 		$this->middleware('recaptcha');
 	}
 
@@ -35,10 +36,12 @@ class AuthController extends Controller
 		# adiciono recaptcha para ser validado.
 		###
 		return Validator::make(
-			array_add($data, 'recaptcha', Session::pull('recaptcha', '')), 
+			array_add(
+				$data, 'recaptcha', Session::pull('recaptcha', '')
+			), 
 			[
 				'nome' => 'required|max:255',
-				'email' => 'required|email|max:255|unique:usuarios',
+				'email' => 'required|email|max:255|unique:users',
 				'password' => 'required|confirmed|min:6',
 				'recaptcha' => 'boolean|verdadeiro',
 			]

@@ -1,11 +1,12 @@
-<?php namespace App\Http\Middleware;
+<?php 
+
+namespace App\Http\Middleware;
 
 use Closure;
-use Request;
 use Session;
 use App\Services\HttpRequest;
 
-class ValidadorReCAPTCHA {
+class ValidatorReCAPTCHA {
 
 	/**
 	 * Handle an incoming request.
@@ -24,12 +25,17 @@ class ValidadorReCAPTCHA {
 			HttpRequest::POST
 			);
 
-		$response = json_decode($httpRequest->getResposta());
+		$resposta = json_decode($httpRequest->getResponse());
 
-		if($httpRequest->sucesso())
-			Session::put('recaptcha', $response->success);
+		if($httpRequest->success())
+		{
+			# ->sucess is a field returned by google recaptcha.
+			Session::put('recaptcha', $resposta->success);
+		}
 		else
+		{
 			Session::put('recaptcha', false);
+		}
 
 		return $next($request);
 	}

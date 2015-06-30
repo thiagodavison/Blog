@@ -1,7 +1,8 @@
-<?php namespace App\Http\Middleware;
+<?php 
+
+namespace App\Http\Middleware;
 
 use Closure;
-use Request;
 use Session;
 use App\Services\HttpRequest;
 
@@ -27,9 +28,14 @@ class ValidadorReCAPTCHA {
 		$resposta = json_decode($httpRequest->getResposta());
 
 		if($httpRequest->sucesso())
+		{
+			# ->sucess é o campo dentro da resposta retornando pelo reCAPTCHA
 			Session::put('recaptcha', $resposta->success);
+		}
 		else
+		{
 			Session::put('recaptcha', false);
+		}
 
 		return $next($request);
 	}
