@@ -15,7 +15,7 @@ class AuthController extends Controller
 	public function __construct()
 	{
 		$this->middleware('guest', ['except' => 'getLogout']);
-		$this->middleware('recaptcha');
+		$this->middleware('recaptcha', ['only' => 'postRegister']);
 	}
 
 	public function validator(array $data)
